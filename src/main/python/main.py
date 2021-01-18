@@ -5,6 +5,7 @@ import sys
 from Library import Library
 
 from MainWindow import Ui_MainWindow
+from OptionsView import OptionsView
 from PlaylistModel import PlaylistModel
 from ArtistModel import ArtistModel
 from AlbumModel import AlbumModel
@@ -14,6 +15,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, *args, obj=None, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
         self.setupUi(self)
+        self.setWindowTitle("iTunes2SD")
 
         self.set_UI()
         self.set_signals()
@@ -28,8 +30,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.vAlbums.setModel(self.album_model)
 
     def set_UI(self):
-        self.cmbFormat.addItem("m3u")
-        self.cmbFormat.addItem("m3u8")
         self.cmbFormat.setCurrentIndex(0)
 
     def set_signals(self):
@@ -46,5 +46,9 @@ if __name__ == '__main__':
     window = MainWindow()
     window.resize(250, 150)
     window.show()
+
+    options = OptionsView()
+    options.show()
+
     exit_code = appctxt.app.exec_()      # 2. Invoke appctxt.app.exec_()
     sys.exit(exit_code)

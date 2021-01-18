@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>930</width>
-    <height>852</height>
+    <height>887</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -37,6 +37,10 @@
 .QListView::item {
 	margin: 4px 10px;
 	left: 4px;
+}
+
+.QListView:alternate {
+	background-color: rgba(255,255,255,.2);
 }</string>
    </property>
    <layout class="QGridLayout" name="gridLayout">
@@ -167,7 +171,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Options</string>
+          <string>Playlist Options</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -194,22 +198,58 @@
 }
 
 QCheckBox::indicator {
-	width : 14;
-	height: 14;
+	width : 16;
+	height: 16;
 	border: 1px solid white;
 	border-radius: 4;
 }
 
-QCheckBox:checked {
-	background-color: #3C91E6;
-}
-
 QCheckBox::indicator:checked {
-	background-color: white;
+	background-color: #FF3C6A;
+	border-color: #FF3C6A;
 }</string>
                </property>
                <property name="text">
                 <string>Use extended playlist format</string>
+               </property>
+               <property name="checked">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QWidget" name="widget_10" native="true">
+            <layout class="QVBoxLayout" name="verticalLayout_4">
+             <item>
+              <widget class="QCheckBox" name="cbExtended_3">
+               <property name="font">
+                <font>
+                 <pointsize>14</pointsize>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QCheckBox {
+	padding: 10;
+	border-radius: 8;
+}
+
+QCheckBox::indicator {
+	width : 16;
+	height: 16;
+	border: 1px solid white;
+	border-radius: 4;
+}
+
+QCheckBox::indicator:checked {
+	background-color: #FF3C6A;
+	border-color: #FF3C6A;
+}</string>
+               </property>
+               <property name="text">
+                <string>Only create playlists (don't copy files)</string>
                </property>
                <property name="checked">
                 <bool>false</bool>
@@ -265,6 +305,16 @@ QCheckBox::indicator:checked {
                <property name="placeholderText">
                 <string>playlist format</string>
                </property>
+               <item>
+                <property name="text">
+                 <string>m3u</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>m3u8</string>
+                </property>
+               </item>
               </widget>
              </item>
             </layout>
@@ -348,10 +398,16 @@ border-radius: 4;
     </item>
     <item row="2" column="0" colspan="2">
      <widget class="QWidget" name="widget_5" native="true">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>100</height>
+       </size>
+      </property>
       <property name="maximumSize">
        <size>
         <width>16777215</width>
-        <height>70</height>
+        <height>100</height>
        </size>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout">

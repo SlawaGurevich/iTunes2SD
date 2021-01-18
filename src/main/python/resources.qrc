@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/icons">
         <file>assets/down-arrow.png</file>
+        <file>assets/icon_placeholder.png</file>
     </qresource>
 </RCC>

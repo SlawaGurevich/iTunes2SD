@@ -29,6 +29,10 @@ class Ui_MainWindow(object):
 ".QListView::item {\n"
 "    margin: 4px 10px;\n"
 "    left: 4px;\n"
+"}\n"
+"\n"
+".QListView:alternate {\n"
+"    background-color: rgba(255,255,255,.2);\n"
 "}")
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
