@@ -32,6 +32,11 @@
     <string notr="true">.QListView {
 	border: 2px solid #3e3e3e;
 	border-radius: 4;
+}
+
+.QListView::item {
+	margin: 4px 10px;
+	left: 4px;
 }</string>
    </property>
    <layout class="QGridLayout" name="gridLayout">
@@ -351,7 +356,7 @@ border-radius: 4;
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QPushButton" name="SyncButton">
+        <widget class="QPushButton" name="bSync">
          <property name="maximumSize">
           <size>
            <width>130</width>
@@ -365,7 +370,7 @@ border-radius: 4;
           </font>
          </property>
          <property name="styleSheet">
-          <string notr="true">#SyncButton {
+          <string notr="true">#bSync {
 	padding: 15;
 	border-radius: 4;
 	background-color: #FF3C6A;

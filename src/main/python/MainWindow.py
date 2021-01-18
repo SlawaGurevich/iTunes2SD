@@ -24,6 +24,11 @@ class Ui_MainWindow(object):
         self.centralwidget.setStyleSheet(".QListView {\n"
 "    border: 2px solid #3e3e3e;\n"
 "    border-radius: 4;\n"
+"}\n"
+"\n"
+".QListView::item {\n"
+"    margin: 4px 10px;\n"
+"    left: 4px;\n"
 "}")
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
@@ -208,19 +213,19 @@ class Ui_MainWindow(object):
         self.widget_5.setObjectName("widget_5")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.widget_5)
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.SyncButton = QtWidgets.QPushButton(self.widget_5)
-        self.SyncButton.setMaximumSize(QtCore.QSize(130, 50))
+        self.bSync = QtWidgets.QPushButton(self.widget_5)
+        self.bSync.setMaximumSize(QtCore.QSize(130, 50))
         font = QtGui.QFont()
         font.setBold(True)
         font.setWeight(75)
-        self.SyncButton.setFont(font)
-        self.SyncButton.setStyleSheet("#SyncButton {\n"
+        self.bSync.setFont(font)
+        self.bSync.setStyleSheet("#bSync {\n"
 "    padding: 15;\n"
 "    border-radius: 4;\n"
 "    background-color: #FF3C6A;\n"
 "}")
-        self.SyncButton.setObjectName("SyncButton")
-        self.horizontalLayout.addWidget(self.SyncButton)
+        self.bSync.setObjectName("bSync")
+        self.horizontalLayout.addWidget(self.bSync)
         self.gridLayout.addWidget(self.widget_5, 2, 0, 1, 2)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -243,4 +248,4 @@ class Ui_MainWindow(object):
         self.cmbFormat.setPlaceholderText(_translate("MainWindow", "playlist format"))
         self.iDestination.setPlaceholderText(_translate("MainWindow", "Destination Folder"))
         self.bDestination.setText(_translate("MainWindow", "select"))
-        self.SyncButton.setText(_translate("MainWindow", "START SYNC"))
+        self.bSync.setText(_translate("MainWindow", "START SYNC"))
