@@ -1,6 +1,8 @@
 from fbs_runtime.application_context.PyQt5 import ApplicationContext
 from PyQt5.QtWidgets import QMainWindow, QFileDialog
 from configparser import ConfigParser
+from LoadingMessageBox import LoadingMessageBox
+from DialogLoading import DialogLoading
 
 import sys
 import os
@@ -28,6 +30,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.path_to_cfg = os.path.join(os.path.expanduser('~'), '.i2sd', 'conf.ini')
         self.setupUi(self)
         self.load_config()
+        self.loading_message = DialogLoading()
 
         self.set_UI()
         self.set_signals()
@@ -51,8 +54,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.config.read(self.path_to_cfg)
         if self.config.has_option("library", "path") and self.config.get("library", "path") != "":
             if os.path.isfile(self.config.get("library", "path")):
-                self.library = Library(self.config.get("library", "path"))
-                self.library.loaded.connect(self.set_up_lib)
+                self.library = Library(path_to_xml=self.config.get("library", "path"))
+                if self.library.get_playlists():
+                    self.set_up_lib()
+                    self.show()
+                else:
+                    self.loading_message.show()
+                    self.library.loaded.connect(self.set_up_lib)
 
                 self.lNoLib.setVisible(False)
                 return
@@ -63,6 +71,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.lNoLib.setVisible(True)
 
     def set_up_lib(self):
+        print("Library set up")
         self.playlist_model = PlaylistModel(playlists=self.library.get_playlists())
         self.artist_model = ArtistModel(artists=self.library.get_artists())
         self.album_model = AlbumModel(albums=self.library.get_albums())
@@ -74,6 +83,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.vPlaylists.setModel(self.playlist_model)
         self.vArtists.setModel(self.artist_model)
         self.vAlbums.setModel(self.album_model)
+
+        self.loading_message.done()
+        self.show()
 
     def list_checked(self):
         playlists = self.playlist_model.get_selected_playlists()
@@ -121,8 +133,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 if __name__ == '__main__':
     appctxt = ApplicationContext()       # 1. Instantiate ApplicationContext
     window = MainWindow()
-    window.resize(250, 150)
-    window.show()
+    # window.show()
 
     exit_code = appctxt.app.exec_()      # 2. Invoke appctxt.app.exec_()
     sys.exit(exit_code)

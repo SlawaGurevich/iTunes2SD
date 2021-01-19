@@ -36,15 +36,21 @@ class Library(QObject):
     path_to_lib = os.path.join(os.path.expanduser('~'), '.i2sd', 'library.lib')
     loaded = pyqtSignal()
 
-    def __init__(self, path_to_xml=None):
+    def __init__(self, path_to_xml=xml_path):
+        print("lib init")
+        print(path_to_xml)
         super().__init__()
         self.check_for_library()
 
     def get_library(self):
+        print("Get library")
         return self.lib
 
     def get_playlists(self):
-        return self.lib["playlists"]
+        print("Get playlists")
+        if len(self.lib):
+            return self.lib["playlists"]
+        return False
 
     def get_songs(self):
         return self.lib["songs"]
@@ -63,6 +69,19 @@ class Library(QObject):
     def set_lib(self, lib):
         self.parsed_lib = lib
         self.save_library()
+
+    def check_for_library(self):
+        if os.path.exists(self.path_to_lib):
+            print("Path to Lib exists.")
+            self.load_library()
+        else:
+            try:
+                os.makedirs(os.path.dirname(os.path.dirname(self.path_to_lib)))
+            except OSError as exc:  # Guard against race condition
+                if exc.errno != errno.EEXIST:
+                    raise
+
+            self.rescan_library()
 
     def save_library(self):
         playlists = []
@@ -93,19 +112,12 @@ class Library(QObject):
     def load_library(self):
         with open(self.path_to_lib, 'rb') as file:
             self.lib = pickle.load(file)
-        print(f'{len(self.lib)} playlists available.')
+        file.close()
+        print(f'{len(self.lib)} items available. {len(self.lib["songs"])}')
 
-    def check_for_library(self):
-        if os.path.exists(self.path_to_lib):
-            self.load_library()
-        else:
-            try:
-                os.makedirs(os.path.dirname(os.path.dirname(self.path_to_lib)))
-            except OSError as exc:  # Guard against race condition
-                if exc.errno != errno.EEXIST:
-                    raise
 
-            self.rescan_library()
+
+        print("Lib Loaded emitted.")
 
 
 

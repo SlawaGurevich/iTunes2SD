@@ -19,7 +19,7 @@ class Ui_dgLoading(object):
         self.verticalLayout = QtWidgets.QVBoxLayout(dgLoading)
         self.verticalLayout.setObjectName("verticalLayout")
         self.widget = QtWidgets.QWidget(dgLoading)
-        self.widget.setMaximumSize(QtCore.QSize(16777215, 30))
+        self.widget.setMaximumSize(QtCore.QSize(16777215, 40))
         self.widget.setObjectName("widget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.widget)
         self.horizontalLayout.setObjectName("horizontalLayout")
@@ -35,7 +35,7 @@ class Ui_dgLoading(object):
         self.dgLoadingLibProgress = QtWidgets.QProgressBar(dgLoading)
         self.dgLoadingLibProgress.setStyleSheet("#dgLoadingLibProgress {\n"
 "    padding: 4;\n"
-"    backgrounf: #3e3e3e;\n"
+"    background: #3e3e3e;\n"
 "    border-radius: 4;\n"
 "}\n"
 "\n"
@@ -43,13 +43,13 @@ class Ui_dgLoading(object):
 "    border-radius: 4;\n"
 "    background: #FF3C6A;\n"
 "}")
-        self.dgLoadingLibProgress.setProperty("value", 24)
+        self.dgLoadingLibProgress.setProperty("value", 0)
         self.dgLoadingLibProgress.setAlignment(QtCore.Qt.AlignCenter)
         self.dgLoadingLibProgress.setObjectName("dgLoadingLibProgress")
         self.verticalLayout.addWidget(self.dgLoadingLibProgress)
         self.dgButtons = QtWidgets.QDialogButtonBox(dgLoading)
         self.dgButtons.setOrientation(QtCore.Qt.Horizontal)
-        self.dgButtons.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
+        self.dgButtons.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel)
         self.dgButtons.setObjectName("dgButtons")
         self.verticalLayout.addWidget(self.dgButtons)
 
