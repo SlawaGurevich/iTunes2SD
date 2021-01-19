@@ -10,7 +10,10 @@ class Library:
     parsed_lib = None
     path_to_lib = os.path.join(os.path.expanduser('~'), '.i2sd', 'library.lib')
 
-    def __init__(self):
+    def __init__(self, path_to_xml=None):
+        self.config.read(self.path_to_cfg)
+
+        self.check_for_xml()
         self.check_for_library()
 
     def get_library(self):

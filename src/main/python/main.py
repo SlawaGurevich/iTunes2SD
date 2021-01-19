@@ -1,7 +1,10 @@
 from fbs_runtime.application_context.PyQt5 import ApplicationContext
-from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtWidgets import QMainWindow, QFileDialog
+from configparser import ConfigParser
 
 import sys
+import os
+
 from Library import Library
 
 from MainWindow import Ui_MainWindow
@@ -12,43 +15,110 @@ from AlbumModel import AlbumModel
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
+    config = ConfigParser()
+    library = None
+    playlist_model = None
+    artist_model = None
+    album_model = None
+
     def __init__(self, *args, obj=None, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
-        self.setupUi(self)
         self.setWindowTitle("iTunes2SD")
+        self.options = OptionsView()
+        self.path_to_cfg = os.path.join(os.path.expanduser('~'), '.i2sd', 'conf.ini')
+        self.setupUi(self)
+        self.load_config()
+        self.check_lib()
 
         self.set_UI()
         self.set_signals()
 
-        self.library = Library()
-        self.playlist_model = PlaylistModel(playlists=self.library.get_playlists())
-        self.artist_model = ArtistModel(artists=self.library.get_artists())
-        self.album_model = AlbumModel(albums=self.library.get_albums())
-
-        self.vPlaylists.setModel(self.playlist_model)
-        self.vArtists.setModel(self.artist_model)
-        self.vAlbums.setModel(self.album_model)
 
     def set_UI(self):
         self.cmbFormat.setCurrentIndex(0)
 
     def set_signals(self):
         self.bSync.clicked.connect(self.list_checked)
+        self.bDestination.clicked.connect(self.select_dir)
+        self.cbExtended.stateChanged.connect(self.save_config)
+        self.cbOnlyPlaylist.stateChanged.connect(self.save_config)
+        self.bMoreOptions.clicked.connect(lambda x: self.options.setVisible(not self.options.isVisible()))
+        self.options.reload.connect(self.check_lib)
+
+    def check_lib(self):
+        print("check")
+        self.config.read(self.path_to_cfg)
+        if self.config.has_option("library", "path") and self.config.get("library", "path") != "":
+            if os.path.isfile(self.config.get("library", "path")):
+                self.library = Library(self.config.get("library", "path"))
+
+                self.playlist_model = PlaylistModel(playlists=self.library.get_playlists())
+                self.artist_model = ArtistModel(artists=self.library.get_artists())
+                self.album_model = AlbumModel(albums=self.library.get_albums())
+
+                self.lPlaylistCount.setText(f'{len(self.library.get_playlists())}')
+                self.lArtistCount.setText(f'{len(self.library.get_artists())}')
+                self.lAlbumCount.setText(f'{len(self.library.get_albums())}')
+
+                self.vPlaylists.setModel(self.playlist_model)
+                self.vArtists.setModel(self.artist_model)
+                self.vAlbums.setModel(self.album_model)
+                self.lNoLib.setVisible(False)
+                return
+            self.lNoLib.setText("XML File not valid.")
+            self.lNoLib.setVisible(True)
+            return
+        self.lNoLib.setText("No library defined. Please provide XML file.")
+        self.lNoLib.setVisible(True)
 
     def list_checked(self):
-        print(list(self.playlist_model._checked_rows))
-        saved_lists = self.library.get_playlists()
-        playlists = sorted([saved_lists[x].title for x in self.playlist_model._checked_rows])
+        playlists = self.playlist_model.get_selected_playlists()
         print(playlists)
+
+    def load_config(self):
+        if not os.path.exists(self.path_to_cfg):
+            try:
+                os.makedirs(os.path.dirname(self.path_to_cfg))
+                open(self.path_to_cfg, "w+").close()
+            except OSError:
+                print("Creation of the directory %s failed" % self.path_to_cfg)
+
+        self.config.read(self.path_to_cfg)
+
+        if not self.config.has_section("main"):
+            self.config.add_section("main")
+
+        self.cbExtended.setChecked(self.config.getboolean("main", "extended", fallback=False))
+        self.cbOnlyPlaylist.setChecked(self.config.getboolean("main", "plonly", fallback=False))
+        self.cmbFormat.setCurrentText(self.config.get("main", "format", fallback="m3u"))
+        if self.config.has_option("main", "destination"):
+            self.iDestination.setText(self.config.get("main", "destination"))
+
+    def save_config(self):
+        if not self.config.has_section("main"):
+            self.config.add_section("main")
+
+        self.config.set("main", "extended", str(self.cbExtended.isChecked()))
+        self.config.set("main", "plonly", str(self.cbOnlyPlaylist.isChecked()))
+        self.config.set("main", "format", self.cmbFormat.currentText())
+        self.config.set("main", "destination", self.iDestination.text())
+
+        with open(self.path_to_cfg, 'w+') as f:
+            self.config.write(f)
+
+    def select_dir(self):
+        destination = str(QFileDialog.getExistingDirectory(self, "Select Target Directory"))
+        if destination:
+            self.iDestination.setText(destination)
+            self.save_config()
+
+
 
 if __name__ == '__main__':
     appctxt = ApplicationContext()       # 1. Instantiate ApplicationContext
     window = MainWindow()
     window.resize(250, 150)
     window.show()
-
-    options = OptionsView()
-    options.show()
 
     exit_code = appctxt.app.exec_()      # 2. Invoke appctxt.app.exec_()
     sys.exit(exit_code)

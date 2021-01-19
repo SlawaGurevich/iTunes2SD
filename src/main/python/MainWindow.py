@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(930, 852)
+        MainWindow.resize(930, 887)
         MainWindow.setMinimumSize(QtCore.QSize(930, 850))
         MainWindow.setStyleSheet("QMainWindow {\n"
 "    background-color: transparent;\n"
@@ -41,24 +41,51 @@ class Ui_MainWindow(object):
         self.widget.setObjectName("widget")
         self.gridLayout_3 = QtWidgets.QGridLayout(self.widget)
         self.gridLayout_3.setObjectName("gridLayout_3")
-        self.lPlaylists = QtWidgets.QLabel(self.widget)
+        self.vPlaylists = QtWidgets.QListView(self.widget)
+        self.vPlaylists.setMinimumSize(QtCore.QSize(400, 0))
+        self.vPlaylists.setObjectName("vPlaylists")
+        self.gridLayout_3.addWidget(self.vPlaylists, 1, 0, 1, 1)
+        self.widget_12 = QtWidgets.QWidget(self.widget)
+        self.widget_12.setObjectName("widget_12")
+        self.horizontalLayout_6 = QtWidgets.QHBoxLayout(self.widget_12)
+        self.horizontalLayout_6.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_6.setSpacing(0)
+        self.horizontalLayout_6.setObjectName("horizontalLayout_6")
+        self.lPlaylists = QtWidgets.QLabel(self.widget_12)
         font = QtGui.QFont()
         font.setPointSize(24)
         font.setBold(True)
         font.setWeight(75)
         self.lPlaylists.setFont(font)
         self.lPlaylists.setObjectName("lPlaylists")
-        self.gridLayout_3.addWidget(self.lPlaylists, 0, 0, 1, 1)
-        self.vPlaylists = QtWidgets.QListView(self.widget)
-        self.vPlaylists.setMinimumSize(QtCore.QSize(400, 0))
-        self.vPlaylists.setObjectName("vPlaylists")
-        self.gridLayout_3.addWidget(self.vPlaylists, 1, 0, 1, 1)
+        self.horizontalLayout_6.addWidget(self.lPlaylists)
+        self.lPlaylistCount = QtWidgets.QLabel(self.widget_12)
+        font = QtGui.QFont()
+        font.setPointSize(24)
+        self.lPlaylistCount.setFont(font)
+        self.lPlaylistCount.setStyleSheet("#lPlaylistCount {\n"
+"    color: #666;\n"
+"}")
+        self.lPlaylistCount.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.lPlaylistCount.setObjectName("lPlaylistCount")
+        self.horizontalLayout_6.addWidget(self.lPlaylistCount)
+        self.gridLayout_3.addWidget(self.widget_12, 0, 0, 1, 1)
         self.gridLayout.addWidget(self.widget, 0, 0, 1, 1)
         self.widget_2 = QtWidgets.QWidget(self.centralwidget)
         self.widget_2.setObjectName("widget_2")
         self.gridLayout_4 = QtWidgets.QGridLayout(self.widget_2)
         self.gridLayout_4.setObjectName("gridLayout_4")
-        self.lArtists = QtWidgets.QLabel(self.widget_2)
+        self.vArtists = QtWidgets.QListView(self.widget_2)
+        self.vArtists.setMinimumSize(QtCore.QSize(400, 0))
+        self.vArtists.setObjectName("vArtists")
+        self.gridLayout_4.addWidget(self.vArtists, 1, 0, 1, 1)
+        self.widget_13 = QtWidgets.QWidget(self.widget_2)
+        self.widget_13.setObjectName("widget_13")
+        self.horizontalLayout_7 = QtWidgets.QHBoxLayout(self.widget_13)
+        self.horizontalLayout_7.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_7.setSpacing(0)
+        self.horizontalLayout_7.setObjectName("horizontalLayout_7")
+        self.lArtists = QtWidgets.QLabel(self.widget_13)
         font = QtGui.QFont()
         font.setPointSize(24)
         font.setBold(True)
@@ -66,22 +93,31 @@ class Ui_MainWindow(object):
         font.setWeight(75)
         self.lArtists.setFont(font)
         self.lArtists.setObjectName("lArtists")
-        self.gridLayout_4.addWidget(self.lArtists, 0, 0, 1, 1)
-        self.vArtists = QtWidgets.QListView(self.widget_2)
-        self.vArtists.setMinimumSize(QtCore.QSize(400, 0))
-        self.vArtists.setObjectName("vArtists")
-        self.gridLayout_4.addWidget(self.vArtists, 1, 0, 1, 1)
+        self.horizontalLayout_7.addWidget(self.lArtists)
+        self.lArtistCount = QtWidgets.QLabel(self.widget_13)
+        font = QtGui.QFont()
+        font.setPointSize(24)
+        font.setStyleStrategy(QtGui.QFont.PreferDefault)
+        self.lArtistCount.setFont(font)
+        self.lArtistCount.setStyleSheet("#lArtistCount {\n"
+"    color: #666;\n"
+"}")
+        self.lArtistCount.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.lArtistCount.setObjectName("lArtistCount")
+        self.horizontalLayout_7.addWidget(self.lArtistCount)
+        self.gridLayout_4.addWidget(self.widget_13, 0, 0, 1, 1)
         self.gridLayout.addWidget(self.widget_2, 0, 1, 1, 1)
         self.widget_3 = QtWidgets.QWidget(self.centralwidget)
         self.widget_3.setObjectName("widget_3")
         self.gridLayout_5 = QtWidgets.QGridLayout(self.widget_3)
         self.gridLayout_5.setObjectName("gridLayout_5")
-        self.vAlbums = QtWidgets.QListView(self.widget_3)
-        self.vAlbums.setMinimumSize(QtCore.QSize(400, 0))
-        self.vAlbums.setStyleSheet("")
-        self.vAlbums.setObjectName("vAlbums")
-        self.gridLayout_5.addWidget(self.vAlbums, 1, 0, 1, 1)
-        self.lAlbums = QtWidgets.QLabel(self.widget_3)
+        self.widget_6 = QtWidgets.QWidget(self.widget_3)
+        self.widget_6.setObjectName("widget_6")
+        self.horizontalLayout_5 = QtWidgets.QHBoxLayout(self.widget_6)
+        self.horizontalLayout_5.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_5.setSpacing(0)
+        self.horizontalLayout_5.setObjectName("horizontalLayout_5")
+        self.lAlbums = QtWidgets.QLabel(self.widget_6)
         font = QtGui.QFont()
         font.setPointSize(24)
         font.setBold(True)
@@ -89,7 +125,23 @@ class Ui_MainWindow(object):
         font.setKerning(True)
         self.lAlbums.setFont(font)
         self.lAlbums.setObjectName("lAlbums")
-        self.gridLayout_5.addWidget(self.lAlbums, 0, 0, 1, 1)
+        self.horizontalLayout_5.addWidget(self.lAlbums)
+        self.lAlbumCount = QtWidgets.QLabel(self.widget_6)
+        font = QtGui.QFont()
+        font.setPointSize(24)
+        self.lAlbumCount.setFont(font)
+        self.lAlbumCount.setStyleSheet("#lAlbumCount {\n"
+"    color: #666\n"
+"}")
+        self.lAlbumCount.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.lAlbumCount.setObjectName("lAlbumCount")
+        self.horizontalLayout_5.addWidget(self.lAlbumCount)
+        self.gridLayout_5.addWidget(self.widget_6, 0, 0, 1, 1)
+        self.vAlbums = QtWidgets.QListView(self.widget_3)
+        self.vAlbums.setMinimumSize(QtCore.QSize(400, 0))
+        self.vAlbums.setStyleSheet("")
+        self.vAlbums.setObjectName("vAlbums")
+        self.gridLayout_5.addWidget(self.vAlbums, 3, 0, 1, 1)
         self.gridLayout.addWidget(self.widget_3, 1, 0, 1, 1)
         self.widget_4 = QtWidgets.QWidget(self.centralwidget)
         font = QtGui.QFont()
@@ -111,44 +163,75 @@ class Ui_MainWindow(object):
         self.lOptions.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.lOptions.setObjectName("lOptions")
         self.gridLayout_6.addWidget(self.lOptions, 0, 0, 1, 1)
-        self.widget_6 = QtWidgets.QWidget(self.widget_4)
-        self.widget_6.setObjectName("widget_6")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.widget_6)
+        self.grOptions = QtWidgets.QWidget(self.widget_4)
+        self.grOptions.setStyleSheet("")
+        self.grOptions.setObjectName("grOptions")
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.grOptions)
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout.setSpacing(0)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.widget_8 = QtWidgets.QWidget(self.widget_6)
+        self.widget_8 = QtWidgets.QWidget(self.grOptions)
         self.widget_8.setObjectName("widget_8")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.widget_8)
+        self.verticalLayout_2.setContentsMargins(0, -1, 0, -1)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.cbExtended = QtWidgets.QCheckBox(self.widget_8)
         font = QtGui.QFont()
         font.setPointSize(14)
         self.cbExtended.setFont(font)
         self.cbExtended.setStyleSheet("QCheckBox {\n"
-"    padding: 10;\n"
+"    padding: 10 0;\n"
 "    border-radius: 8;\n"
 "}\n"
 "\n"
 "QCheckBox::indicator {\n"
-"    width : 14;\n"
-"    height: 14;\n"
+"    width : 16;\n"
+"    height: 16;\n"
 "    border: 1px solid white;\n"
 "    border-radius: 4;\n"
 "}\n"
 "\n"
-"QCheckBox:checked {\n"
-"    background-color: #3C91E6;\n"
-"}\n"
-"\n"
 "QCheckBox::indicator:checked {\n"
-"    background-color: white;\n"
+"    background-color: #FF3C6A;\n"
+"    border-color: #FF3C6A;\n"
 "}")
         self.cbExtended.setChecked(False)
         self.cbExtended.setObjectName("cbExtended")
         self.verticalLayout_2.addWidget(self.cbExtended)
         self.verticalLayout.addWidget(self.widget_8)
-        self.widget_7 = QtWidgets.QWidget(self.widget_6)
+        self.widget_10 = QtWidgets.QWidget(self.grOptions)
+        self.widget_10.setObjectName("widget_10")
+        self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.widget_10)
+        self.verticalLayout_4.setContentsMargins(0, -1, 0, -1)
+        self.verticalLayout_4.setObjectName("verticalLayout_4")
+        self.cbOnlyPlaylist = QtWidgets.QCheckBox(self.widget_10)
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.cbOnlyPlaylist.setFont(font)
+        self.cbOnlyPlaylist.setStyleSheet("QCheckBox {\n"
+"    padding: 10 0;\n"
+"    border-radius: 8;\n"
+"}\n"
+"\n"
+"QCheckBox::indicator {\n"
+"    width : 16;\n"
+"    height: 16;\n"
+"    border: 1px solid white;\n"
+"    border-radius: 4;\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:checked {\n"
+"    background-color: #FF3C6A;\n"
+"    border-color: #FF3C6A;\n"
+"}")
+        self.cbOnlyPlaylist.setChecked(False)
+        self.cbOnlyPlaylist.setObjectName("cbOnlyPlaylist")
+        self.verticalLayout_4.addWidget(self.cbOnlyPlaylist)
+        self.verticalLayout.addWidget(self.widget_10)
+        self.widget_7 = QtWidgets.QWidget(self.grOptions)
         self.widget_7.setObjectName("widget_7")
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.widget_7)
+        self.horizontalLayout_3.setContentsMargins(0, -1, 0, -1)
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.lFormat = QtWidgets.QLabel(self.widget_7)
         self.lFormat.setMaximumSize(QtCore.QSize(120, 16777215))
@@ -172,15 +255,18 @@ class Ui_MainWindow(object):
 "    image: url(:/icons/assets/down-arrow.png)\n"
 "}")
         self.cmbFormat.setObjectName("cmbFormat")
+        self.cmbFormat.addItem("")
+        self.cmbFormat.addItem("")
         self.horizontalLayout_3.addWidget(self.cmbFormat)
         self.verticalLayout.addWidget(self.widget_7)
-        self.widget_9 = QtWidgets.QWidget(self.widget_6)
+        self.widget_9 = QtWidgets.QWidget(self.grOptions)
         self.widget_9.setObjectName("widget_9")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.widget_9)
+        self.horizontalLayout_2.setContentsMargins(0, -1, 0, -1)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.iDestination = QtWidgets.QLineEdit(self.widget_9)
         self.iDestination.setMinimumSize(QtCore.QSize(200, 40))
-        self.iDestination.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        self.iDestination.setMaximumSize(QtCore.QSize(16777215, 40))
         font = QtGui.QFont()
         font.setPointSize(14)
         font.setBold(False)
@@ -196,7 +282,8 @@ class Ui_MainWindow(object):
         self.iDestination.setObjectName("iDestination")
         self.horizontalLayout_2.addWidget(self.iDestination)
         self.bDestination = QtWidgets.QPushButton(self.widget_9)
-        self.bDestination.setMinimumSize(QtCore.QSize(100, 42))
+        self.bDestination.setMinimumSize(QtCore.QSize(100, 40))
+        self.bDestination.setMaximumSize(QtCore.QSize(16777215, 40))
         font = QtGui.QFont()
         font.setPointSize(14)
         font.setBold(True)
@@ -210,10 +297,36 @@ class Ui_MainWindow(object):
         self.bDestination.setObjectName("bDestination")
         self.horizontalLayout_2.addWidget(self.bDestination)
         self.verticalLayout.addWidget(self.widget_9)
-        self.gridLayout_6.addWidget(self.widget_6, 1, 0, 1, 1)
+        self.widget_11 = QtWidgets.QWidget(self.grOptions)
+        self.widget_11.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.widget_11.setObjectName("widget_11")
+        self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.widget_11)
+        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
+        self.lNoLib = QtWidgets.QLabel(self.widget_11)
+        self.lNoLib.setEnabled(True)
+        self.lNoLib.setVisible(False)
+        self.lNoLib.setStyleSheet("#lNoLib {\n"
+"    color: red;\n"
+"}")
+        self.lNoLib.setObjectName("lNoLib")
+        self.horizontalLayout_4.addWidget(self.lNoLib)
+        self.bMoreOptions = QtWidgets.QPushButton(self.widget_11)
+        self.bMoreOptions.setMaximumSize(QtCore.QSize(200, 16777215))
+        self.bMoreOptions.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.bMoreOptions.setStyleSheet("#bMoreOptions {\n"
+"    border: none;\n"
+"    background: #3e3e3e;\n"
+"    padding: 7;\n"
+"    border-radius: 4;\n"
+"}")
+        self.bMoreOptions.setObjectName("bMoreOptions")
+        self.horizontalLayout_4.addWidget(self.bMoreOptions)
+        self.verticalLayout.addWidget(self.widget_11)
+        self.gridLayout_6.addWidget(self.grOptions, 1, 0, 1, 1)
         self.gridLayout.addWidget(self.widget_4, 1, 1, 1, 1)
         self.widget_5 = QtWidgets.QWidget(self.centralwidget)
-        self.widget_5.setMaximumSize(QtCore.QSize(16777215, 70))
+        self.widget_5.setMinimumSize(QtCore.QSize(0, 100))
+        self.widget_5.setMaximumSize(QtCore.QSize(16777215, 100))
         self.widget_5.setObjectName("widget_5")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.widget_5)
         self.horizontalLayout.setObjectName("horizontalLayout")
@@ -244,12 +357,20 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.lPlaylists.setText(_translate("MainWindow", "Playlists"))
+        self.lPlaylistCount.setText(_translate("MainWindow", "0"))
         self.lArtists.setText(_translate("MainWindow", "Artists"))
+        self.lArtistCount.setText(_translate("MainWindow", "0"))
         self.lAlbums.setText(_translate("MainWindow", "Albums"))
-        self.lOptions.setText(_translate("MainWindow", "Options"))
+        self.lAlbumCount.setText(_translate("MainWindow", "0"))
+        self.lOptions.setText(_translate("MainWindow", "Playlist Options"))
         self.cbExtended.setText(_translate("MainWindow", "Use extended playlist format"))
+        self.cbOnlyPlaylist.setText(_translate("MainWindow", "Only create playlists (don\'t copy files)"))
         self.lFormat.setText(_translate("MainWindow", "Playlist Format"))
         self.cmbFormat.setPlaceholderText(_translate("MainWindow", "playlist format"))
+        self.cmbFormat.setItemText(0, _translate("MainWindow", "m3u"))
+        self.cmbFormat.setItemText(1, _translate("MainWindow", "m3u8"))
         self.iDestination.setPlaceholderText(_translate("MainWindow", "Destination Folder"))
         self.bDestination.setText(_translate("MainWindow", "select"))
+        self.lNoLib.setText(_translate("MainWindow", "No Library defined! Please provide XML file. "))
+        self.bMoreOptions.setText(_translate("MainWindow", "More Options  »"))
         self.bSync.setText(_translate("MainWindow", "START SYNC"))

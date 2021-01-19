@@ -18,6 +18,9 @@ class PlaylistModel(QtCore.QAbstractListModel):
     def rowCount(self, index):
         return len(self.playlists)
 
+    def get_selected_playlists(self):
+        return sorted([self.playlists[x].title for x in self._checked_rows])
+
     def setData(self, index, value, role):
         if role == Qt.CheckStateRole:
             if value == Qt.Checked:
