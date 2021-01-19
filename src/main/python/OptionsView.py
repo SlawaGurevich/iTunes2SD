@@ -2,7 +2,7 @@ import os
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QAction, QFileDialog
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import pyqtSignal, QUrl
 from OptionsWindow import Ui_OptionsWindow
 
 from configparser import ConfigParser
@@ -56,9 +56,11 @@ class OptionsView(QMainWindow, Ui_OptionsWindow):
         self.iLibraryXML.textChanged.connect(self.save_config)
 
     def set_lib(self):
-        file = str(QFileDialog.getOpenFileName(self, "Select XML File", filter="xml(*.xml)"))
+        file, _ = QFileDialog.getOpenFileName(self, "Select XML File")
+
         if file:
             print(type(file))
+            print(file)
             if not self.config.has_section("library"):
                 self.config.add_section("library")
 

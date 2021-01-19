@@ -28,10 +28,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.path_to_cfg = os.path.join(os.path.expanduser('~'), '.i2sd', 'conf.ini')
         self.setupUi(self)
         self.load_config()
-        self.check_lib()
 
         self.set_UI()
         self.set_signals()
+
+        self.check_lib()
 
 
     def set_UI(self):
@@ -51,18 +52,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.config.has_option("library", "path") and self.config.get("library", "path") != "":
             if os.path.isfile(self.config.get("library", "path")):
                 self.library = Library(self.config.get("library", "path"))
+                self.library.loaded.connect(self.set_up_lib)
 
-                self.playlist_model = PlaylistModel(playlists=self.library.get_playlists())
-                self.artist_model = ArtistModel(artists=self.library.get_artists())
-                self.album_model = AlbumModel(albums=self.library.get_albums())
-
-                self.lPlaylistCount.setText(f'{len(self.library.get_playlists())}')
-                self.lArtistCount.setText(f'{len(self.library.get_artists())}')
-                self.lAlbumCount.setText(f'{len(self.library.get_albums())}')
-
-                self.vPlaylists.setModel(self.playlist_model)
-                self.vArtists.setModel(self.artist_model)
-                self.vAlbums.setModel(self.album_model)
                 self.lNoLib.setVisible(False)
                 return
             self.lNoLib.setText("XML File not valid.")
@@ -70,6 +61,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             return
         self.lNoLib.setText("No library defined. Please provide XML file.")
         self.lNoLib.setVisible(True)
+
+    def set_up_lib(self):
+        self.playlist_model = PlaylistModel(playlists=self.library.get_playlists())
+        self.artist_model = ArtistModel(artists=self.library.get_artists())
+        self.album_model = AlbumModel(albums=self.library.get_albums())
+
+        self.lPlaylistCount.setText(f'{len(self.library.get_playlists())}')
+        self.lArtistCount.setText(f'{len(self.library.get_artists())}')
+        self.lAlbumCount.setText(f'{len(self.library.get_albums())}')
+
+        self.vPlaylists.setModel(self.playlist_model)
+        self.vArtists.setModel(self.artist_model)
+        self.vAlbums.setModel(self.album_model)
 
     def list_checked(self):
         playlists = self.playlist_model.get_selected_playlists()

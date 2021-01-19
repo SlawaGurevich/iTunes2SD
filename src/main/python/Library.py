@@ -1,19 +1,43 @@
 from itunesLibrary import library
+from PyQt5.QtCore import QRunnable, QObject, QThreadPool, pyqtSlot, pyqtSignal
 import pickle
 import os
 import errno
 
 
-class Library:
+class WorkerSignals(QObject):
+    finished = pyqtSignal()
+    error = pyqtSignal(str)
+    result = pyqtSignal(library.Library)
+
+
+class Worker(QRunnable):
+    def __init__(self, xml):
+        super().__init__()
+        self.signals = WorkerSignals()
+        self.xml = xml
+
+    @pyqtSlot()
+    def run(self):
+        try:
+            lib = library.parse(self.xml)
+        except Exception as e:
+            self.signals.error.emit(str(e))
+        else:
+            self.signals.finished.emit()
+            self.signals.result.emit(lib)
+
+
+class Library(QObject):
     lib = {}
+    thread_pool = QThreadPool()
     xml_path = os.path.join(os.getenv("HOME"), "Music/iTunes/Library.xml")
     parsed_lib = None
     path_to_lib = os.path.join(os.path.expanduser('~'), '.i2sd', 'library.lib')
+    loaded = pyqtSignal()
 
     def __init__(self, path_to_xml=None):
-        self.config.read(self.path_to_cfg)
-
-        self.check_for_xml()
+        super().__init__()
         self.check_for_library()
 
     def get_library(self):
@@ -31,8 +55,13 @@ class Library:
     def get_artists(self):
         return self.lib["artists"]
 
-    def reload_library(self, path=xml_path):
-        self.parsed_lib = library.parse(path)
+    def rescan_library(self, path=xml_path):
+        worker = Worker(path)
+        worker.signals.result.connect(self.set_lib)
+        self.thread_pool.start(worker)
+
+    def set_lib(self, lib):
+        self.parsed_lib = lib
         self.save_library()
 
     def save_library(self):
@@ -59,6 +88,8 @@ class Library:
         with open(self.path_to_lib, 'wb+') as file:
             pickle.dump(self.lib, file)
 
+        self.loaded.emit()
+
     def load_library(self):
         with open(self.path_to_lib, 'rb') as file:
             self.lib = pickle.load(file)
@@ -69,12 +100,13 @@ class Library:
             self.load_library()
         else:
             try:
-                os.makedirs(os.path.dirname(self.path_to_lib))
+                os.makedirs(os.path.dirname(os.path.dirname(self.path_to_lib)))
             except OSError as exc:  # Guard against race condition
                 if exc.errno != errno.EEXIST:
                     raise
 
-            self.reload_library()
+            self.rescan_library()
+
 
 
 
