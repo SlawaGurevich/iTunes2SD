@@ -331,6 +331,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.widget_5)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.bSync = QtWidgets.QPushButton(self.widget_5)
+        self.bSync.setEnabled(True)
         self.bSync.setMaximumSize(QtCore.QSize(130, 50))
         font = QtGui.QFont()
         font.setBold(True)
@@ -340,6 +341,10 @@ class Ui_MainWindow(object):
 "    padding: 15;\n"
 "    border-radius: 4;\n"
 "    background-color: #FF3C6A;\n"
+"}\n"
+"\n"
+"#bSync:disabled {\n"
+"    background-color: #3e3e3e;\n"
 "}")
         self.bSync.setObjectName("bSync")
         self.horizontalLayout.addWidget(self.bSync)
@@ -373,4 +378,4 @@ class Ui_MainWindow(object):
         self.bDestination.setText(_translate("MainWindow", "select"))
         self.lNoLib.setText(_translate("MainWindow", "No Library defined! Please provide XML file. "))
         self.bMoreOptions.setText(_translate("MainWindow", "More Options  »"))
-        self.bSync.setText(_translate("MainWindow", "START SYNC"))
+        self.bSync.setText(_translate("MainWindow", "SYNC"))

@@ -636,6 +636,9 @@ border-radius: 4;
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
         <widget class="QPushButton" name="bSync">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
          <property name="maximumSize">
           <size>
            <width>130</width>
@@ -653,10 +656,14 @@ border-radius: 4;
 	padding: 15;
 	border-radius: 4;
 	background-color: #FF3C6A;
+}
+
+#bSync:disabled {
+	background-color: #3e3e3e;
 }</string>
          </property>
          <property name="text">
-          <string>START SYNC</string>
+          <string>SYNC</string>
          </property>
         </widget>
        </item>

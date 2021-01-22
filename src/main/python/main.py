@@ -14,6 +14,7 @@ from OptionsView import OptionsView
 from PlaylistModel import PlaylistModel
 from ArtistModel import ArtistModel
 from AlbumModel import AlbumModel
+from FileHandler import FileHandler
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -28,6 +29,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setWindowTitle("iTunes2SD")
         self.options = OptionsView()
         self.path_to_cfg = os.path.join(os.path.expanduser('~'), '.i2sd', 'conf.ini')
+        self.config.read(self.path_to_cfg)
+        self.file_handler = FileHandler(self.config)
         self.setupUi(self)
         self.load_config()
         self.loading_message = DialogLoading()
@@ -35,23 +38,25 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.set_UI()
         self.set_signals()
 
-        self.check_lib()
+        self.check_sync()
 
+        self.check_lib()
 
     def set_UI(self):
         self.cmbFormat.setCurrentIndex(0)
 
     def set_signals(self):
-        self.bSync.clicked.connect(self.list_checked)
+        self.bSync.clicked.connect(self.sync)
         self.bDestination.clicked.connect(self.select_dir)
         self.cbExtended.stateChanged.connect(self.save_config)
         self.cbOnlyPlaylist.stateChanged.connect(self.save_config)
+        self.cmbFormat.currentIndexChanged.connect(self.save_config)
         self.bMoreOptions.clicked.connect(lambda x: self.options.setVisible(not self.options.isVisible()))
         self.options.reload.connect(self.check_lib)
+        self.iDestination.textChanged.connect(self.check_sync)
 
     def check_lib(self):
         print("check")
-        self.config.read(self.path_to_cfg)
         if self.config.has_option("library", "path") and self.config.get("library", "path") != "":
             if os.path.isfile(self.config.get("library", "path")):
                 self.library = Library(path_to_xml=self.config.get("library", "path"))
@@ -86,10 +91,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.loading_message.done()
         self.show()
-
-    def list_checked(self):
-        playlists = self.playlist_model.get_selected_playlists()
-        print(playlists)
 
     def load_config(self):
         if not os.path.exists(self.path_to_cfg):
@@ -128,6 +129,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.iDestination.setText(destination)
             self.save_config()
 
+    def check_sync(self):
+        condition = self.iDestination.text() != ""
+        self.bSync.setEnabled(condition)
+
+    def sync(self):
+        playlists = self.playlist_model.get_selected_playlists()
+        self.file_handler.create_playlist_files(playlists)
 
 
 if __name__ == '__main__':
