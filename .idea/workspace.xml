@@ -2,19 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5892a811-3c0d-411e-b4ef-a220291292be" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/itunes2sd/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/itunes2sd/main.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/itunes2sd/main.pyproject" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/python/FileHandler.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/python/FileHandler.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/python/MainWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/python/MainWindow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/python/PlaylistModel.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/python/PlaylistModel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/python/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/python/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/python/main.pyproject.user" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/python/main.pyproject.user" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/python/mainwindow.ui" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/python/mainwindow.ui" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/python/optionswindow.ui" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/python/optionswindow.ui" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/python/optionswindow.ui.autosave" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -11,17 +11,19 @@ class FileHandler(QObject):
     def create_playlist_files(self, playlists):
         destination = self.config.get("main", "destination")
         playlist_format = self.config.get("main", "format")
+        extended = self.config.getboolean("main", "extended")
 
 
         for playlist in playlists:
             url = os.path.join(destination, f'{playlist.title}.{playlist_format}')
             items = playlist.items
 
-            with open(url, "w+") as file:
-                #initial line for extended format
-                file.write("#EXTM3U\n\n")
+            if extended:
+                with open(url, "w+") as file:
+                    #initial line for extended format
+                    file.write("#EXTM3U\n\n")
 
-                print(f'Length: {len(items)}')
+                    print(f'Length: {len(items)}')
 
             for item in items:
                 src = QUrl(item.itunesAttibutes["Location"]).toLocalFile()
@@ -54,8 +56,9 @@ class FileHandler(QObject):
                     artist = item.itunesAttibutes['Artist'] if "Artist" in item.itunesAttibutes else ""
 
                     # write metadata
-                    with open(url, "a") as file:
-                        file.write(f'#EXTINF; {length}, {artist} - {title}\n')
+                    if extended:
+                        with open(url, "a") as file:
+                            file.write(f'#EXTINF; {length}, {artist} - {title}\n')
 
                     with open(url, "a") as file:
                         file.write(f'{localpath}/{QUrl(item.itunesAttibutes["Location"]).fileName()}\n\n')
