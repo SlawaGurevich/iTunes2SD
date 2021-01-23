@@ -326,19 +326,23 @@ class Ui_MainWindow(object):
         self.gridLayout.addWidget(self.widget_4, 1, 1, 1, 1)
         self.widget_5 = QtWidgets.QWidget(self.centralwidget)
         self.widget_5.setMinimumSize(QtCore.QSize(0, 100))
-        self.widget_5.setMaximumSize(QtCore.QSize(16777215, 100))
+        self.widget_5.setMaximumSize(QtCore.QSize(16777215, 300))
         self.widget_5.setObjectName("widget_5")
-        self.horizontalLayout = QtWidgets.QHBoxLayout(self.widget_5)
-        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.gridLayout_2 = QtWidgets.QGridLayout(self.widget_5)
+        self.gridLayout_2.setObjectName("gridLayout_2")
+        spacerItem = QtWidgets.QSpacerItem(76, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout_2.addItem(spacerItem, 0, 0, 1, 1)
         self.bSync = QtWidgets.QPushButton(self.widget_5)
         self.bSync.setEnabled(True)
-        self.bSync.setMaximumSize(QtCore.QSize(130, 50))
+        self.bSync.setMinimumSize(QtCore.QSize(130, 0))
+        self.bSync.setMaximumSize(QtCore.QSize(130, 200))
         font = QtGui.QFont()
         font.setBold(True)
         font.setWeight(75)
         self.bSync.setFont(font)
         self.bSync.setStyleSheet("#bSync {\n"
 "    padding: 15;\n"
+"    margin-bottom: 20;\n"
 "    border-radius: 4;\n"
 "    background-color: #FF3C6A;\n"
 "}\n"
@@ -347,8 +351,30 @@ class Ui_MainWindow(object):
 "    background-color: #3e3e3e;\n"
 "}")
         self.bSync.setObjectName("bSync")
-        self.horizontalLayout.addWidget(self.bSync)
-        self.gridLayout.addWidget(self.widget_5, 2, 0, 1, 2)
+        self.gridLayout_2.addWidget(self.bSync, 0, 1, 1, 1)
+        spacerItem1 = QtWidgets.QSpacerItem(76, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout_2.addItem(spacerItem1, 0, 2, 1, 1)
+        self.cpProgress = QtWidgets.QProgressBar(self.widget_5)
+        self.cpProgress.setMinimumSize(QtCore.QSize(300, 0))
+        self.cpProgress.setMaximumSize(QtCore.QSize(16777215, 10))
+        self.cpProgress.setStyleSheet("#cpProgress {\n"
+"    border-radius 4;\n"
+"    height: 15;\n"
+"font-size: 10;\n"
+"}\n"
+"\n"
+"#cpProgress::chunk {\n"
+"    background-color:  #FF3C6A;\n"
+"    border-radius: 4;\n"
+"}\n"
+"")
+        self.cpProgress.setProperty("value", 50)
+        self.cpProgress.setAlignment(QtCore.Qt.AlignCenter)
+        self.cpProgress.setTextVisible(False)
+        self.cpProgress.setOrientation(QtCore.Qt.Horizontal)
+        self.cpProgress.setObjectName("cpProgress")
+        self.gridLayout_2.addWidget(self.cpProgress, 1, 0, 1, 3)
+        self.gridLayout.addWidget(self.widget_5, 2, 0, 1, 2, QtCore.Qt.AlignHCenter)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 930, 21))

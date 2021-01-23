@@ -19,7 +19,7 @@ class PlaylistModel(QtCore.QAbstractListModel):
         return len(self.playlists)
 
     def get_selected_playlists(self):
-        return sorted([self.playlists[x] for x in self._checked_rows])
+        return [self.playlists[x] for x in self._checked_rows]
 
     def setData(self, index, value, role):
         if role == Qt.CheckStateRole:

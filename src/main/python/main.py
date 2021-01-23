@@ -26,7 +26,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def __init__(self, *args, obj=None, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
-        self.setWindowTitle("iTunes2SD")
         self.options = OptionsView()
         self.path_to_cfg = os.path.join(os.path.expanduser('~'), '.i2sd', 'conf.ini')
         self.config.read(self.path_to_cfg)
@@ -44,6 +43,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def set_UI(self):
         self.cmbFormat.setCurrentIndex(0)
+        self.cpProgress.setValue(0)
 
     def set_signals(self):
         self.bSync.clicked.connect(self.sync)
@@ -54,6 +54,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.bMoreOptions.clicked.connect(lambda x: self.options.setVisible(not self.options.isVisible()))
         self.options.reload.connect(self.check_lib)
         self.iDestination.textChanged.connect(self.check_sync)
+        self.file_handler.progress.connect(lambda progress, file: self.cpProgress.setValue(progress))
+        self.file_handler.finished.connect(lambda: self.bSync.setEnabled(True))
 
     def check_lib(self):
         print("check")
@@ -78,8 +80,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def set_up_lib(self):
         print("Library set up")
         self.playlist_model = PlaylistModel(playlists=self.library.get_playlists())
-        self.artist_model = ArtistModel(artists=self.library.get_artists())
-        self.album_model = AlbumModel(albums=self.library.get_albums())
+        self.artist_model = ArtistModel(library=self.library)
+        self.album_model = AlbumModel(library=self.library)
 
         self.lPlaylistCount.setText(f'{len(self.library.get_playlists())}')
         self.lArtistCount.setText(f'{len(self.library.get_artists())}')
@@ -134,14 +136,24 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.bSync.setEnabled(condition)
 
     def sync(self):
+        self.cpProgress.setValue(0)
+        self.bSync.setEnabled(False)
         playlists = self.playlist_model.get_selected_playlists()
-        self.file_handler.create_playlist_files(playlists)
+        artists = self.artist_model.get_selected_artists()
+        albums = self.album_model.get_selected_albums()
+        self.file_handler.create_files(playlists=playlists, artists=artists, albums=albums, config=self.config)
+
+
+class AppContext(ApplicationContext):
+    def run(self):
+        window = MainWindow()
+        version = self.build_settings["version"]
+        window.setWindowTitle(f'iTunes2SD ({ version })')
+        window.show()
+        return self.app.exec_()
 
 
 if __name__ == '__main__':
-    appctxt = ApplicationContext()       # 1. Instantiate ApplicationContext
-    window = MainWindow()
-    # window.show()
-
-    exit_code = appctxt.app.exec_()      # 2. Invoke appctxt.app.exec_()
+    appctxt = AppContext()       # 1. Instantiate ApplicationContext
+    exit_code = appctxt.run()      # 2. Invoke appctxt.app.exec_()
     sys.exit(exit_code)
