@@ -11,3 +11,4 @@ class LoadingMessageBox(QMessageBox):
 
     def button_clicked(self, i):
         print(i)
+        pass

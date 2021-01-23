@@ -1,6 +1,6 @@
-from fbs_runtime.application_context.PyQt5 import ApplicationContext
+from fbs_runtime.application_context.PyQt5 import ApplicationContext, cached_property
 from PyQt5.QtWidgets import QMainWindow, QFileDialog
-from configparser import ConfigParser
+from ConfigHandler import ConfigHandler
 from LoadingMessageBox import LoadingMessageBox
 from DialogLoading import DialogLoading
 
@@ -18,7 +18,7 @@ from FileHandler import FileHandler
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
-    config = ConfigParser()
+    config = None
     library = None
     playlist_model = None
     artist_model = None
@@ -26,10 +26,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def __init__(self, *args, obj=None, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
-        self.options = OptionsView()
         self.path_to_cfg = os.path.join(os.path.expanduser('~'), '.i2sd', 'conf.ini')
-        self.config.read(self.path_to_cfg)
-        self.file_handler = FileHandler(self.config)
+        self.config = ConfigHandler(self.path_to_cfg)
+        self.file_handler = FileHandler(config=self.config)
+        self.options = OptionsView(config=self.config)
         self.setupUi(self)
         self.load_config()
         self.loading_message = DialogLoading()
@@ -95,15 +95,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.show()
 
     def load_config(self):
-        if not os.path.exists(self.path_to_cfg):
-            try:
-                os.makedirs(os.path.dirname(self.path_to_cfg))
-                open(self.path_to_cfg, "w+").close()
-            except OSError:
-                print("Creation of the directory %s failed" % self.path_to_cfg)
-
-        self.config.read(self.path_to_cfg)
-
         if not self.config.has_section("main"):
             self.config.add_section("main")
 
@@ -122,8 +113,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.config.set("main", "format", self.cmbFormat.currentText())
         self.config.set("main", "destination", self.iDestination.text())
 
-        with open(self.path_to_cfg, 'w+') as f:
-            self.config.write(f)
+        self.config.save()
 
     def select_dir(self):
         destination = str(QFileDialog.getExistingDirectory(self, "Select Target Directory"))
@@ -141,17 +131,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         playlists = self.playlist_model.get_selected_playlists()
         artists = self.artist_model.get_selected_artists()
         albums = self.album_model.get_selected_albums()
-        self.file_handler.create_files(playlists=playlists, artists=artists, albums=albums, config=self.config)
+        self.file_handler.create_files(playlists=playlists, artists=artists, albums=albums)
 
 
 class AppContext(ApplicationContext):
     def run(self):
+        self.main_window.show()
+        return self.app.exec_()
+
+    @cached_property
+    def main_window(self):
         window = MainWindow()
         version = self.build_settings["version"]
         window.setWindowTitle(f'iTunes2SD ({ version })')
-        window.show()
-        return self.app.exec_()
-
+        return window
 
 if __name__ == '__main__':
     appctxt = AppContext()       # 1. Instantiate ApplicationContext

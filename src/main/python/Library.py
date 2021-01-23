@@ -37,17 +37,17 @@ class Library(QObject):
     loaded = pyqtSignal()
 
     def __init__(self, path_to_xml=xml_path):
-        print("lib init")
-        print(path_to_xml)
+        # print("lib init")
+        # print(path_to_xml)
         super().__init__()
         self.check_for_library()
 
     def get_library(self):
-        print("Get library")
+        # print("Get library")
         return self.lib
 
     def get_playlists(self):
-        print("Get playlists")
+        # print("Get playlists")
         if len(self.lib):
             return self.lib["playlists"]
         return False
@@ -93,7 +93,6 @@ class Library(QObject):
         for song in self.parsed_lib.items:
             songs.append(song)
 
-        print(songs[0].itunesAttibutes)
         artists = sorted(list(set(map(lambda x: str(x.getItunesAttribute("Artist")), songs))))
         albums = sorted(list(set(map(lambda x: str(x.getItunesAttribute("Album")), songs))))
 
@@ -102,7 +101,7 @@ class Library(QObject):
         self.lib["artists"] = artists
         self.lib["albums"] = albums
 
-        print(f'{len(self.lib)} new playlists generated.')
+        # print(f'{len(self.lib)} new playlists generated.')
 
         with open(self.path_to_lib, 'wb+') as file:
             pickle.dump(self.lib, file)
@@ -113,7 +112,7 @@ class Library(QObject):
         with open(self.path_to_lib, 'rb') as file:
             self.lib = pickle.load(file)
         file.close()
-        print(f'{len(self.lib)} items available. {len(self.lib["songs"])}')
+        # print(f'{len(self.lib)} items available. {len(self.lib["songs"])}')
 
 
 

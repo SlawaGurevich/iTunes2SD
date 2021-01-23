@@ -2,8 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5892a811-3c0d-411e-b4ef-a220291292be" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/python/ConfigHandler.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/python/optionswindow.ui.autosave" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/python/FileHandler.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/python/FileHandler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/python/Library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/python/Library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/python/LoadingMessageBox.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/python/LoadingMessageBox.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/python/OptionHandler.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/python/OptionsView.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/python/OptionsView.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/python/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/python/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -9,19 +9,18 @@ from configparser import ConfigParser
 
 import resources
 
+
 class OptionsView(QMainWindow, Ui_OptionsWindow):
     reload = pyqtSignal(bool)
-    config = ConfigParser()
-    path_to_cfg = os.path.join(os.path.expanduser('~'), '.i2sd', 'conf.ini')
 
-    def __init__(self, *args, obj=None, **kwargs):
+    def __init__(self, *args, config=None, obj=None, **kwargs):
         super(OptionsView, self).__init__(*args, **kwargs)
-        self.config.read(self.path_to_cfg)
         self.setupUi(self)
+        self.config = config
+        self.load_config()
         self.setWindowTitle("Options")
         self.set_up_toolbar()
         self.signals()
-        self.load_config()
 
     def set_up_toolbar(self):
         placeholder_icon = QtGui.QIcon(":/icons/assets/icon_placeholder.png")
@@ -48,12 +47,44 @@ class OptionsView(QMainWindow, Ui_OptionsWindow):
         self.stckOptionsPages.setCurrentIndex(0)
 
     def load_config(self):
+        if not self.config.has_section("general"):
+            self.config.add_section("general")
+
+        if not self.config.has_section("library"):
+            self.config.add_section("library")
+
+        if self.config.has_option("general", "album_copy_type"):
+            # print(self.config.get("general", "album_copy_type"))
+            self.cbAlbumCopy.setCurrentText(self.config.get("general", "album_copy_type"))
+        else:
+            self.config.set("general", "album_copy_type", "Just copy the files")
+            self.config.save()
+
+        if self.config.has_option("general", "artist_copy_type"):
+            # print(self.config.get("general", "artist_copy_type"))
+            self.cbArtistCopy.setCurrentText(self.config.get("general", "artist_copy_type"))
+        else:
+            self.config.set("general", "artist_copy_type", "Just copy the files")
+            self.config.save()
+
         if self.config.has_option("library", "path"):
             self.iLibraryXML.setText(self.config.get("library", "path"))
 
+
     def signals(self):
         self.bLibraryXML.clicked.connect(self.set_lib)
-        self.iLibraryXML.textChanged.connect(self.save_config)
+        self.iLibraryXML.textChanged.connect(self.set_lib_value)
+        self.cbArtistCopy.currentTextChanged.connect(
+            lambda x: self.set_option("general", "artist_copy_type", self.cbArtistCopy.currentText())
+        )
+        self.cbAlbumCopy.currentTextChanged.connect(
+            lambda x: self.set_option("general", "album_copy_type", self.cbAlbumCopy.currentText())
+        )
+
+    def set_option(self, group, option, value):
+        print(group, option, value)
+        self.config.set(group, option, value)
+        self.save_config()
 
     def set_lib(self):
         file, _ = QFileDialog.getOpenFileName(self, "Select XML File")
@@ -63,15 +94,27 @@ class OptionsView(QMainWindow, Ui_OptionsWindow):
             print(file)
             if not self.config.has_section("library"):
                 self.config.add_section("library")
+                self.set_lib_value()
 
             self.iLibraryXML.setText(file)
             self.save_config()
 
+    def set_lib_value(self):
+        self.config.set("library", "path", self.iLibraryXML.text())
+        self.save_config()
+
+    def set_album_copy_type_value(self):
+        self.config.set("general", "album_copy_type", self.cbAlbumCopy.currentText())
+        print(self.config.get("general", "album_copy_type"))
+        self.save_config()
+
+    def set_artist_copy_type_value(self):
+        self.config.set("general", "artist_copy_type", self.cbArtistCopy.currentText())
+        print(self.config.get("general", "artist_copy_type"))
+        self.save_config()
 
     def save_config(self):
-        self.config.set("library", "path", self.iLibraryXML.text())
-        with open(self.path_to_cfg, 'w+') as f:
-            self.config.write(f)
+        self.config.save()
         self.reload.emit(True)
 
     def show_widget(self, widget):

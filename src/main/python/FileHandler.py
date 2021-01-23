@@ -1,6 +1,5 @@
 import os
 import shutil
-import functools
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, QRunnable, QThreadPool
 from PyQt5.QtCore import QObject, QUrl
 
@@ -64,10 +63,10 @@ class Worker(QRunnable):
             # write metadata
             if url:
                 if self.extended:
-                    with open(url, "a") as file:
+                    with open(url, "a+") as file:
                         file.write(f'#EXTINF; {length}, {artist} - {title}\n')
 
-                with open(url, "a") as file:
+                with open(url, "a+") as file:
                     file.write(f'{localpath}/{QUrl(item.itunesAttibutes["Location"]).fileName()}\n\n')
 
         except OSError as e:
@@ -75,13 +74,14 @@ class Worker(QRunnable):
 
         self.files_copied += 1
         self.signals.progress.emit(int(100 * self.files_copied / self.all_item_count), filename)
-        print(self.files_copied)
+        # print(self.files_copied)
 
     def create_playlist_file(self, url):
         if self.extended:
-            with open(url, "w+") as file:
-                # initial line for extended format
-                file.write("#EXTM3U\n\n")
+            if not os.path.exists(url):
+                with open(url, "w+") as file:
+                    # initial line for extended format
+                    file.write("#EXTM3U\n\n")
 
                 # print(f'Length: {len(items)}')
 
@@ -107,7 +107,7 @@ class Worker(QRunnable):
                 for artist in artists:
                     self.all_item_count += len(artist["items"])
 
-            print(self.all_item_count)
+            # print(self.all_item_count)
 
         if playlists:
             for playlist in playlists:
@@ -119,21 +119,42 @@ class Worker(QRunnable):
                     self.create_file_from_song_item(item, url)
 
         if albums:
-            for album in albums:
-                url = os.path.join(self.destination, f'{album["name"]}.{self.playlist_format}')
-                self.create_playlist_file(url)
+            print(self.config.get("general", "album_copy_type"))
+            album_copy_type = self.config.get("general", "album_copy_type")
+
+            for i, album in enumerate(albums):
+                url = None
+
+                if album_copy_type != "Just copy the files":
+                    if album_copy_type == "Create a playlist with all albums":
+                        url = os.path.join(self.destination, f'Albums.{self.playlist_format}')
+                        if i == 0 and os.path.exists(url):
+                            os.remove(url)
+                    elif album_copy_type == "Create a playlist for each album":
+                        url = os.path.join(self.destination, f'{album["name"]}.{self.playlist_format}')
+                    self.create_playlist_file(url)
 
                 for item in album["items"]:
-                    print(item.getItunesAttribute("Location"))
+                    # print(item.getItunesAttribute("Location"))
                     self.create_file_from_song_item(item, url)
 
         if artists:
-            for artist in artists:
-                url = os.path.join(self.destination, f'{artist["name"]}.{self.playlist_format}')
-                self.create_playlist_file(url)
+            print(self.config.get("general", "artist_copy_type"))
+            artist_copy_type = self.config.get("general", "artist_copy_type")
+
+            for i, artist in enumerate(artists):
+                url = None
+
+                if artist_copy_type != "Just copy the files":
+                    if artist_copy_type == "Create a playlist with all artists":
+                        url = os.path.join(self.destination, f'Artists.{self.playlist_format}')
+                        if i == 0 and os.path.exists(url):
+                            os.remove(url)
+                    elif artist_copy_type == "Create a playlist for each artist":
+                        url = os.path.join(self.destination, f'{artist["name"]}.{self.playlist_format}')
+                    self.create_playlist_file(url)
 
                 for item in artist["items"]:
-                    print(item.getItunesAttribute("Location"))
                     self.create_file_from_song_item(item, url)
 
         self.signals.finished.emit()
@@ -153,8 +174,8 @@ class FileHandler(QObject):
         self.config = config
         self.thread_pool = QThreadPool()
 
-    def create_files(self, playlists=[], artists=[], albums=[], config=None):
-        worker = Worker(playlists=playlists, artists=artists, albums=albums, config=config)
+    def create_files(self, playlists=[], artists=[], albums=[]):
+        worker = Worker(playlists=playlists, artists=artists, albums=albums, config=self.config)
         worker.signals.progress.connect(self.emit_progress)
         worker.signals.finished.connect(self.emit_finished)
         self.thread_pool.start(worker)
@@ -164,6 +185,6 @@ class FileHandler(QObject):
 
     def emit_progress(self, progress, file):
         self.progress.emit(progress, file)
-        print(f'{progress}, {file}')
+        # print(f'{progress}, {file}')
 
 
