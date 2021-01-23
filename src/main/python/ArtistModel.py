@@ -5,6 +5,7 @@ from PyQt5.QtCore import Qt
 class ArtistModel(QtCore.QAbstractListModel):
     def __init__(self, library=[]):
         super().__init__()
+        self.library = library
         self._checked_rows = set()
         self.artists = library.get_artists() or []
 
