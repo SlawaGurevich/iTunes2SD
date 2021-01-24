@@ -2,5 +2,7 @@
     <qresource prefix="/icons">
         <file>assets/down-arrow.png</file>
         <file>assets/icon_placeholder.png</file>
+        <file>assets/icon_copying.png</file>
+        <file>assets/icon_library.png</file>
     </qresource>
 </RCC>

@@ -4,6 +4,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QAction, QFileDialog
 from PyQt5.QtCore import pyqtSignal, QUrl
 from OptionsWindow import Ui_OptionsWindow
+import datetime
 
 from configparser import ConfigParser
 
@@ -25,16 +26,18 @@ class OptionsView(QMainWindow, Ui_OptionsWindow):
 
     def set_up_toolbar(self):
         placeholder_icon = QtGui.QIcon(":/icons/assets/icon_placeholder.png")
+        library_icon = QtGui.QIcon(":/icons/assets/icon_library.png")
+        copying_icon = QtGui.QIcon(":/icons/assets/icon_copying.png")
         group = QtWidgets.QActionGroup(self)
         group.setExclusive(True)
 
-        bLibrary = QAction(placeholder_icon, "Library", self, checkable=True)
+        bLibrary = QAction(library_icon, "Library", self, checkable=True)
         bLibrary.setStatusTip("Change the options regarding your library.")
         bLibrary.setObjectName("bLibrary")
         bLibrary.setChecked(True)
         bLibrary.triggered.connect(lambda s: self.show_widget(self.pgOptionsLibrary))
 
-        bGeneral = QAction(placeholder_icon, "Copying", self, checkable=True)
+        bGeneral = QAction(copying_icon, "Copying", self, checkable=True)
         bGeneral.setStatusTip("Change general settings.")
         bLibrary.setObjectName("bGeneral")
         bGeneral.triggered.connect(lambda s: self.show_widget(self.pgOptionsCopying))
@@ -81,6 +84,15 @@ class OptionsView(QMainWindow, Ui_OptionsWindow):
         self.cbAlbumCopy.currentTextChanged.connect(
             lambda x: self.set_option("general", "album_copy_type", self.cbAlbumCopy.currentText())
         )
+
+    def set_statistics(self, playlists=0, songs=0, albums=0, artists=0, date=None):
+        text = ""
+        text += f'Playlists: {playlists}\n'
+        text += f'Songs: {songs}\n'
+        text += f'Albums: {albums}\n'
+        text += f'Artists: {artists}\n'
+        text += f'Last updated: {date}'
+        self.txtLibraryInfo.setPlainText(text)
 
     def set_option(self, group, option, value):
         print(group, option, value)

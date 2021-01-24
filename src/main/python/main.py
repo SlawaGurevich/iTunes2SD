@@ -4,6 +4,7 @@ from PyQt5 import QtCore
 from ConfigHandler import ConfigHandler
 from LoadingMessageBox import LoadingMessageBox
 from DialogLoading import DialogLoading
+from datetime import datetime
 
 import sys
 import os
@@ -87,6 +88,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.lNoLib.setVisible(True)
 
     def set_up_lib(self):
+        total_playlists = len(self.library.get_playlists())
+        total_songs = len(self.library.get_songs())
+        total_albums = len(self.library.get_albums())
+        total_artists = len(self.library.get_artists())
+        date = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+
+        self.options.set_statistics(total_playlists,
+                                    total_songs,
+                                    total_albums,
+                                    total_artists,
+                                    date)
+
         print("Library set up")
         self.playlist_model = PlaylistModel(library=self.library)
         self.artist_model = ArtistModel(library=self.library)
@@ -101,6 +114,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.vAlbums.setModel(self.album_model)
 
         self.loading_message.close()
+
         self.show()
 
     def load_config(self):
