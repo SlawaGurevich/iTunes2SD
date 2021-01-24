@@ -14,42 +14,24 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_dgLoading(object):
     def setupUi(self, dgLoading):
         dgLoading.setObjectName("dgLoading")
-        dgLoading.resize(400, 150)
+        dgLoading.resize(250, 100)
         dgLoading.setMaximumSize(QtCore.QSize(16777215, 150))
         self.verticalLayout = QtWidgets.QVBoxLayout(dgLoading)
         self.verticalLayout.setObjectName("verticalLayout")
         self.widget = QtWidgets.QWidget(dgLoading)
-        self.widget.setMaximumSize(QtCore.QSize(16777215, 40))
         self.widget.setObjectName("widget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.widget)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.lLoadingStatus = QtWidgets.QLabel(self.widget)
-        self.lLoadingStatus.setAlignment(QtCore.Qt.AlignBottom|QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft)
+        self.lLoadingStatus.setFrameShadow(QtWidgets.QFrame.Plain)
+        self.lLoadingStatus.setAlignment(QtCore.Qt.AlignCenter)
+        self.lLoadingStatus.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
         self.lLoadingStatus.setObjectName("lLoadingStatus")
         self.horizontalLayout.addWidget(self.lLoadingStatus)
-        self.lLoadingIIems = QtWidgets.QLabel(self.widget)
-        self.lLoadingIIems.setAlignment(QtCore.Qt.AlignBottom|QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing)
-        self.lLoadingIIems.setObjectName("lLoadingIIems")
-        self.horizontalLayout.addWidget(self.lLoadingIIems)
         self.verticalLayout.addWidget(self.widget)
-        self.dgLoadingLibProgress = QtWidgets.QProgressBar(dgLoading)
-        self.dgLoadingLibProgress.setStyleSheet("#dgLoadingLibProgress {\n"
-"    padding: 4;\n"
-"    background: #3e3e3e;\n"
-"    border-radius: 4;\n"
-"}\n"
-"\n"
-"#dgLoadingLibProgress::chunk {\n"
-"    border-radius: 4;\n"
-"    background: #FF3C6A;\n"
-"}")
-        self.dgLoadingLibProgress.setProperty("value", 0)
-        self.dgLoadingLibProgress.setAlignment(QtCore.Qt.AlignCenter)
-        self.dgLoadingLibProgress.setObjectName("dgLoadingLibProgress")
-        self.verticalLayout.addWidget(self.dgLoadingLibProgress)
         self.dgButtons = QtWidgets.QDialogButtonBox(dgLoading)
         self.dgButtons.setOrientation(QtCore.Qt.Horizontal)
-        self.dgButtons.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel)
+        self.dgButtons.setStandardButtons(QtWidgets.QDialogButtonBox.NoButton)
         self.dgButtons.setObjectName("dgButtons")
         self.verticalLayout.addWidget(self.dgButtons)
 
@@ -62,4 +44,3 @@ class Ui_dgLoading(object):
         _translate = QtCore.QCoreApplication.translate
         dgLoading.setWindowTitle(_translate("dgLoading", "Dialog"))
         self.lLoadingStatus.setText(_translate("dgLoading", "Loading Library..."))
-        self.lLoadingIIems.setText(_translate("dgLoading", "20/2000"))

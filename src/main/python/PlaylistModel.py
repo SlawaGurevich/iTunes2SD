@@ -3,10 +3,10 @@ from PyQt5.QtCore import Qt
 
 
 class PlaylistModel(QtCore.QAbstractListModel):
-    def __init__(self, playlists=None):
+    def __init__(self, library=None):
         super().__init__()
         self._checked_rows = set()
-        self.playlists = playlists or []
+        self.playlists = library.get_playlists() or []
 
     def data(self, index, role):
         if role == Qt.DisplayRole:

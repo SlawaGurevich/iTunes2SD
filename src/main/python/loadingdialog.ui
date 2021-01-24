@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>150</height>
+    <width>250</width>
+    <height>100</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -22,56 +22,24 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QWidget" name="widget" native="true">
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>40</height>
-      </size>
-     </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <widget class="QLabel" name="lLoadingStatus">
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
         <property name="text">
          <string>Loading Library...</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+         <set>Qt::AlignCenter</set>
         </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lLoadingIIems">
-        <property name="text">
-         <string>20/2000</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignBottom|Qt::AlignRight|Qt::AlignTrailing</set>
+        <property name="textInteractionFlags">
+         <set>Qt::NoTextInteraction</set>
         </property>
        </widget>
       </item>
      </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QProgressBar" name="dgLoadingLibProgress">
-     <property name="styleSheet">
-      <string notr="true">#dgLoadingLibProgress {
-	padding: 4;
-	background: #3e3e3e;
-	border-radius: 4;
-}
-
-#dgLoadingLibProgress::chunk {
-	border-radius: 4;
-	background: #FF3C6A;
-}</string>
-     </property>
-     <property name="value">
-      <number>0</number>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
     </widget>
    </item>
    <item>
@@ -80,7 +48,7 @@
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel</set>
+      <set>QDialogButtonBox::NoButton</set>
      </property>
     </widget>
    </item>

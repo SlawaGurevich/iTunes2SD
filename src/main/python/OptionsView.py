@@ -11,7 +11,8 @@ import resources
 
 
 class OptionsView(QMainWindow, Ui_OptionsWindow):
-    reload = pyqtSignal(bool)
+    reload = pyqtSignal()
+    load = pyqtSignal()
 
     def __init__(self, *args, config=None, obj=None, **kwargs):
         super(OptionsView, self).__init__(*args, **kwargs)
@@ -70,10 +71,10 @@ class OptionsView(QMainWindow, Ui_OptionsWindow):
         if self.config.has_option("library", "path"):
             self.iLibraryXML.setText(self.config.get("library", "path"))
 
-
     def signals(self):
         self.bLibraryXML.clicked.connect(self.set_lib)
         self.iLibraryXML.textChanged.connect(self.set_lib_value)
+        self.bReloadLibrary.clicked.connect(self.reload.emit)
         self.cbArtistCopy.currentTextChanged.connect(
             lambda x: self.set_option("general", "artist_copy_type", self.cbArtistCopy.currentText())
         )
@@ -115,7 +116,7 @@ class OptionsView(QMainWindow, Ui_OptionsWindow):
 
     def save_config(self):
         self.config.save()
-        self.reload.emit(True)
+        self.load.emit()
 
     def show_widget(self, widget):
         self.stckOptionsPages.setCurrentWidget(widget)

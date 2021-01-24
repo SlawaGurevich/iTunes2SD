@@ -1,5 +1,6 @@
 from fbs_runtime.application_context.PyQt5 import ApplicationContext, cached_property
 from PyQt5.QtWidgets import QMainWindow, QFileDialog
+from PyQt5 import QtCore
 from ConfigHandler import ConfigHandler
 from LoadingMessageBox import LoadingMessageBox
 from DialogLoading import DialogLoading
@@ -23,27 +24,28 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     playlist_model = None
     artist_model = None
     album_model = None
+    path_to_cfg = os.path.join(os.path.expanduser('~'), '.i2sd', 'conf.ini')
+    config = ConfigHandler(path_to_cfg)
 
     def __init__(self, *args, obj=None, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
-        self.path_to_cfg = os.path.join(os.path.expanduser('~'), '.i2sd', 'conf.ini')
-        self.config = ConfigHandler(self.path_to_cfg)
-        self.file_handler = FileHandler(config=self.config)
-        self.options = OptionsView(config=self.config)
         self.setupUi(self)
         self.load_config()
+
+        self.file_handler = FileHandler(config=self.config)
+        self.options = OptionsView(config=self.config)
         self.loading_message = DialogLoading()
 
-        self.set_UI()
+        self.set_ui()
         self.set_signals()
-
-        self.check_sync()
 
         self.check_lib()
 
-    def set_UI(self):
+    def set_ui(self):
         self.cmbFormat.setCurrentIndex(0)
         self.cpProgress.setValue(0)
+        self.check_sync()
+
 
     def set_signals(self):
         self.bSync.clicked.connect(self.sync)
@@ -52,34 +54,41 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.cbOnlyPlaylist.stateChanged.connect(self.save_config)
         self.cmbFormat.currentIndexChanged.connect(self.save_config)
         self.bMoreOptions.clicked.connect(lambda x: self.options.setVisible(not self.options.isVisible()))
-        self.options.reload.connect(self.check_lib)
+        self.options.load.connect(self.check_lib)
+        self.options.reload.connect(self.reload_library)
         self.iDestination.textChanged.connect(self.check_sync)
         self.file_handler.progress.connect(lambda progress, file: self.cpProgress.setValue(progress))
         self.file_handler.finished.connect(lambda: self.bSync.setEnabled(True))
 
+    def reload_library(self):
+        print("Main.py: reload_library")
+        self.loading_message.show()
+        self.library.reload_library()
+
     def check_lib(self):
         print("check")
-        if self.config.has_option("library", "path") and self.config.get("library", "path") != "":
-            if os.path.isfile(self.config.get("library", "path")):
-                self.library = Library(path_to_xml=self.config.get("library", "path"))
-                if self.library.get_playlists():
-                    self.set_up_lib()
-                    self.show()
-                else:
-                    self.loading_message.show()
-                    self.library.loaded.connect(self.set_up_lib)
 
+        if self.config.has_option("library", "path") and self.config.get("library", "path") != "":
+
+            if os.path.isfile(self.config.get("library", "path")):
+                self.loading_message.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+                self.loading_message.show()
+                self.library = Library(path_to_xml=self.config.get("library", "path"))
+                self.library.loaded.connect(self.set_up_lib)
+                self.library.check_for_library()
                 self.lNoLib.setVisible(False)
+
                 return
             self.lNoLib.setText("XML File not valid.")
             self.lNoLib.setVisible(True)
             return
+
         self.lNoLib.setText("No library defined. Please provide XML file.")
         self.lNoLib.setVisible(True)
 
     def set_up_lib(self):
         print("Library set up")
-        self.playlist_model = PlaylistModel(playlists=self.library.get_playlists())
+        self.playlist_model = PlaylistModel(library=self.library)
         self.artist_model = ArtistModel(library=self.library)
         self.album_model = AlbumModel(library=self.library)
 
@@ -91,7 +100,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.vArtists.setModel(self.artist_model)
         self.vAlbums.setModel(self.album_model)
 
-        self.loading_message.done()
+        self.loading_message.close()
         self.show()
 
     def load_config(self):

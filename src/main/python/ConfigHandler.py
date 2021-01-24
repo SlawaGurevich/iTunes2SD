@@ -7,12 +7,18 @@ class ConfigHandler:
         self.config = ConfigParser()
         self.path_to_cfg = path_to_cfg
 
-        if not os.path.exists(self.path_to_cfg):
-            try:
-                os.makedirs(os.path.dirname(self.path_to_cfg))
-                open(self.path_to_cfg, "w+").close()
-            except OSError:
-                print("Creation of the directory %s failed" % self.path_to_cfg)
+        if not os.path.isfile(self.path_to_cfg):
+            if not os.path.isdir(os.path.dirname(self.path_to_cfg)):
+                try:
+                    os.makedirs(os.path.dirname(self.path_to_cfg))
+                except OSError as e:
+                    print(e)
+
+            if not os.path.isfile(self.path_to_cfg):
+                try:
+                    open(self.path_to_cfg, "w+").close()
+                except OSError as e:
+                    print(e)
 
         self.config.read(self.path_to_cfg)
 
